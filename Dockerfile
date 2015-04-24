@@ -14,7 +14,9 @@ RUN rpm -ivh http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.
 
 EXPOSE 5432
 
-RUN su postgres
+#ENTRYPOINT ["/usr/pgsql-9.3/bin/postgres"]
+#CMD ["-D", "/var/lib/pgsql/9.3/data"]
 
-ENTRYPOINT ["/usr/pgsql-9.3/bin/postgres"]
-CMD ["-D", "/var/lib/pgsql/9.3/data"]
+# Keep container from shutting down until explicitly stopped
+ENTRYPOINT ["/usr/bin/tail"]
+CMD ["-f", "/dev/null"]
