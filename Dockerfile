@@ -8,9 +8,20 @@ RUN groupadd -r postgres && useradd -r -g postgres postgres
 ENV container docker
 ENV TERM xterm
 
+RUN echo -e "\
+[EPEL]\n\
+name=Extra Packages for Enterprise Linux \$releasever - \$basearch\n\
+#baseurl=http://download.fedoraproject.org/pub/epel/\$releasever/\$basearch\n\
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-\$releasever&arch=\$basearch\n\
+failovermethod=priority\n\
+enabled=1\n\
+gpgcheck=0\n\
+" >> /etc/yum.repos.d/epel.repo
 RUN rpm -ivh http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm && \
-	yum install -y postgresql93 postgresql93-server postgresql93-odbc unixODBC && \
+	yum install -y postgresql93 postgresql93-server postgresql93-odbc unixODBC pwgen hostname sudo && \
 	yum clean all
+
+USER postgres
 
 EXPOSE 5432
 
